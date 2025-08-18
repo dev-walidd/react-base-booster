@@ -1,37 +1,16 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { dummyUsers } from '../data/users';
 
-// Types
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  mobile: string;
-}
-
-interface AuthState {
-  isAuthenticated: boolean;
-  user: User | null;
-  loading: boolean;
-}
-
-interface ApiContextType {
-  authState: AuthState;
-  signIn: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
-  signUp: (userData: Omit<User, 'id'> & { password: string }) => Promise<{ success: boolean; message: string }>;
-  signOut: () => void;
-}
-
 // Create context
-const ApiContext = createContext<ApiContextType | undefined>(undefined);
+const ApiContext = createContext(undefined);
 
 // Environment variables
 const USE_DUMP_DATA = import.meta.env.VITE_USE_DUMP_DATA === 'true';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.example.com';
 
 // API Context Provider
-export const ApiProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [authState, setAuthState] = useState<AuthState>({
+export const ApiProvider = ({ children }) => {
+  const [authState, setAuthState] = useState({
     isAuthenticated: false,
     user: null,
     loading: false,
@@ -75,7 +54,7 @@ export const ApiProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   }, []);
 
   // Sign In function
-  const signIn = async (email: string, password: string): Promise<{ success: boolean; message: string }> => {
+  const signIn = async (email, password) => {
     setAuthState(prev => ({ ...prev, loading: true }));
 
     try {
@@ -133,7 +112,7 @@ export const ApiProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   // Sign Up function
-  const signUp = async (userData: Omit<User, 'id'> & { password: string }): Promise<{ success: boolean; message: string }> => {
+  const signUp = async (userData) => {
     setAuthState(prev => ({ ...prev, loading: true }));
 
     try {
@@ -149,7 +128,7 @@ export const ApiProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         }
         
         // Create new user
-        const newUser: User = {
+        const newUser = {
           id: `user_${Date.now()}`,
           name: userData.name,
           email: userData.email,
@@ -209,7 +188,7 @@ export const ApiProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     });
   };
 
-  const value: ApiContextType = {
+  const value = {
     authState,
     signIn,
     signUp,
@@ -220,7 +199,7 @@ export const ApiProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 };
 
 // Custom hook to use the API context
-export const useApi = (): ApiContextType => {
+export const useApi = () => {
   const context = useContext(ApiContext);
   if (context === undefined) {
     throw new Error('useApi must be used within an ApiProvider');

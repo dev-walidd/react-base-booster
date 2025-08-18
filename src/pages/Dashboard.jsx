@@ -5,7 +5,7 @@ import { Button } from '../components/ui/button';
 import { useApi } from '../context/ApiContext';
 import Logo from '../components/Logo';
 
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
   const navigate = useNavigate();
   const { authState, signOut } = useApi();
 

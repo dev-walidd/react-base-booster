@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Logo: React.FC = () => {
+const Logo = () => {
   return (
     <div className="flex justify-center mb-6">
       <div className="text-2xl font-bold text-foreground">
