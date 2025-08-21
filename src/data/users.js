@@ -1,8 +1,6 @@
-import { User } from '../context/ApiContext';
-
 // Dummy user data for development and testing
 // This simulates the API response when VITE_USE_DUMP_DATA=true
-export const dummyUsers: User[] = [
+export const dummyUsers = [
   {
     id: 'user_1',
     name: 'John Doe',
